@@ -39,6 +39,14 @@ data class HomeScreenState(
         }
     }
 
+    @Stable
+    data class CoffeeIsReadyUiState(
+        val isTakeAway: Boolean,
+        val coffeeUi: CoffeeUi,
+        @DrawableRes val cover: Int
+    )
+
+    @Stable
     data class ChooseYourSnackUiState(
         val snackList: List<SnackUi> = emptyList()
     ) {

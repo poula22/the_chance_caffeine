@@ -108,7 +108,7 @@ fun ChooseYourCoffeeScreen(
                     val transition = updateTransition(targetState = pagerState.currentPage)
                     val coffeeImageSize by transition.animateDp(
                         transitionSpec = {
-                            tween(durationMillis = 1000, easing = EaseOut)
+                            tween(durationMillis = 300, easing = EaseOut)
                         },
                         label = "coffeeImageSize",
                         targetValueByState = { state ->
@@ -117,7 +117,7 @@ fun ChooseYourCoffeeScreen(
                     )
                     val brandImageSize by transition.animateDp(
                         transitionSpec = {
-                            tween(durationMillis = 1000, easing = EaseOut)
+                            tween(durationMillis = 300, easing = EaseOut)
                         },
                         label = "brandImageSize",
                         targetValueByState = { state ->
@@ -127,7 +127,7 @@ fun ChooseYourCoffeeScreen(
 
                     val brandImagePadding by transition.animateDp(
                         transitionSpec = {
-                            tween(durationMillis = 1000, easing = EaseOut)
+                            tween(durationMillis = 300, easing = EaseOut)
                         },
                         label = "brandImageSize",
                         targetValueByState = { state ->

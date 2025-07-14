@@ -1,5 +1,6 @@
 package com.thechance.caffeine.presentation.feature.home.navigation
 
+import androidx.annotation.DrawableRes
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -15,4 +16,7 @@ data class CoffeeDetailsRoute(val coffee: String)
 data class CoffeeIsReadyRoute(val coffee: String)
 
 @Serializable
-object ThankYouRoute
+object SnackScreenRoute
+
+@Serializable
+data class ThankYouRoute(@DrawableRes val snackRes: Int)
