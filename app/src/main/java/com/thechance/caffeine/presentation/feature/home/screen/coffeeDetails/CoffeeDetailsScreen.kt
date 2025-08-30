@@ -137,9 +137,9 @@ fun CoffeeDetailsScreen(
                 else -> 70.dp.toPx()
             }
             if (isAddingBeans) {
-                listOf(-200.dp.toPx(), offset, 1f, 0.5f)
+                listOf(-300.dp.toPx(), offset, 1f, 0.5f)
             } else {
-                listOf(offset, -200.dp.toPx(), 0.5f, 1f)
+                listOf(offset, -320.dp.toPx(), 0.5f, 1f)
             }
         }
         val job1 = launch {
@@ -154,13 +154,13 @@ fun CoffeeDetailsScreen(
         val job4 = launch {
             beanImageYOffset.animateTo(
                 targetValue = endYOffset,
-                animationSpec = tween(durationMillis = 600, easing = EaseOut)
+                animationSpec = tween(durationMillis = 900, easing = EaseOut)
             )
         }
         val job5 = launch {
             beanImageScale.animateTo(
                 targetValue = endScale,
-                animationSpec = tween(durationMillis = 600, easing = EaseOut)
+                animationSpec = tween(durationMillis = 900, easing = EaseOut)
             )
         }
 

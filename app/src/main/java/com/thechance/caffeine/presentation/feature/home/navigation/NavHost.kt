@@ -107,7 +107,10 @@ fun CaffeineNavHost(
             )
         }
 
-        composable<CoffeeIsReadyRoute> {
+        composable<CoffeeIsReadyRoute>(
+            enterTransition = { slideInVertically(spring()) { it } },
+            exitTransition = { slideOutVertically(spring()) { it } }
+        ) {
             val route = it.toRoute<CoffeeIsReadyRoute>()
             val cup = getCupImageResourceFromCoffeeName(route.coffee)
             val cover = getCoverImageResourceFromCoffeeName(route.coffee)

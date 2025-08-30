@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.PageSize
-import androidx.compose.foundation.pager.PagerDefaults
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -56,10 +55,7 @@ fun SnacksList(
         pageSize = PageSize.Fixed(260.dp),
         beyondViewportPageCount = pagerState.pageCount,
         pageSpacing = -20.dp,
-        flingBehavior = PagerDefaults.flingBehavior(
-            state = pagerState,
-            snapAnimationSpec = tween(0)
-        )
+        horizontalAlignment = Alignment.Start
     ) { index ->
         val item = list[index]
         val itemTransition = updateTransition(pagerState.currentPage)

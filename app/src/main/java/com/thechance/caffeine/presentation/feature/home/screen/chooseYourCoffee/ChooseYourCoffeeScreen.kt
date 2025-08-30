@@ -5,6 +5,8 @@ import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,10 +27,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,6 +48,7 @@ import com.thechance.caffeine.presentation.feature.home.event.OnClick
 import com.thechance.caffeine.presentation.feature.home.model.HomeScreenState
 import com.thechance.caffeine.presentation.theme.CaffeineTheme
 import com.thechance.caffeine.presentation.theme.TextColorLight
+import kotlinx.coroutines.launch
 
 @Composable
 fun ChooseYourCoffeeScreen(
@@ -52,7 +58,10 @@ fun ChooseYourCoffeeScreen(
     onCoffeeButtonClick: (coffee: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val screenConfig = LocalWindowInfo.current
     val pagerState = rememberPagerState { coffeeState.coffeeList.size }
+    val interactionResource = remember { MutableInteractionSource() }
+    val scope = rememberCoroutineScope()
 
     Scaffold(
         modifier = modifier,
@@ -96,10 +105,9 @@ fun ChooseYourCoffeeScreen(
                         .padding(top = 56.dp)
                         .wrapContentHeight(),
                     state = pagerState,
-                    reverseLayout = true,
                     pageSpacing = 8.dp,
                     contentPadding = PaddingValues(
-                        horizontal = 80.dp
+                        horizontal = screenConfig.containerSize.width.dp / 10
                     ),
                     pageSize = PageSize.Fixed(199.dp),
                     beyondViewportPageCount = pagerState.pageCount
@@ -141,12 +149,34 @@ fun ChooseYourCoffeeScreen(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center
                         ) {
-                            Box {
+                            Box(
+                                Modifier.combinedClickable(
+                                    interactionSource = interactionResource,
+                                    indication = null,
+                                    onDoubleClick = {},
+                                    onLongClick = {}
+                                ) {
+                                    scope.launch {
+                                        if (pagerState.currentPage == coffeeIndex) onCoffeeButtonClick(
+                                            coffeeState.coffeeList[pagerState.currentPage].title
+                                        )
+                                        else
+                                            pagerState.animateScrollToPage(
+                                                coffeeIndex,
+                                                animationSpec = tween(
+                                                    durationMillis = 300,
+                                                    easing = EaseOut
+                                                )
+                                            )
+                                    }
+                                }
+                            ) {
                                 Image(
                                     painter = painterResource(coffee.image),
                                     contentDescription = "coffee image",
                                     contentScale = ContentScale.FillHeight,
                                     modifier = Modifier.height(coffeeImageSize)
+
                                 )
 
                                 Image(
