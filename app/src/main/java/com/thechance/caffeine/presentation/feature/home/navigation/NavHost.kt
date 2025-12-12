@@ -1,8 +1,5 @@
 package com.thechance.caffeine.presentation.feature.home.navigation
 
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -31,7 +28,6 @@ import com.thechance.caffeine.presentation.theme.Background
 
 @Composable
 fun CaffeineNavHost(
-    modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ) {
     NavHost(
@@ -78,10 +74,7 @@ fun CaffeineNavHost(
             )
         }
 
-        composable<CoffeeDetailsRoute>(
-            enterTransition = { slideInVertically(spring()) { it } },
-            exitTransition = { slideOutVertically(spring()) { it } }
-        ) {
+        composable<CoffeeDetailsRoute> {
             val route = it.toRoute<CoffeeDetailsRoute>()
             val state = remember {
                 mutableStateOf(
@@ -94,7 +87,6 @@ fun CaffeineNavHost(
             var isAddingBeans by remember { mutableStateOf(true) }
 
             CoffeeDetailsScreen(
-                modifier = Modifier.background(Background),
                 coffeeDetailsUiState = state.value,
                 isAddingBeans = isAddingBeans,
                 onBeanClick = {
@@ -107,10 +99,7 @@ fun CaffeineNavHost(
             )
         }
 
-        composable<CoffeeIsReadyRoute>(
-            enterTransition = { slideInVertically(spring()) { it } },
-            exitTransition = { slideOutVertically(spring()) { it } }
-        ) {
+        composable<CoffeeIsReadyRoute> {
             val route = it.toRoute<CoffeeIsReadyRoute>()
             val cup = getCupImageResourceFromCoffeeName(route.coffee)
             val cover = getCoverImageResourceFromCoffeeName(route.coffee)

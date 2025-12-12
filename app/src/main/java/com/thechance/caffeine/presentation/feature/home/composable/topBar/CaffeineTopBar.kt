@@ -26,8 +26,7 @@ fun CaffeineTopBar(
 
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row {
             AnimatedVisibility(

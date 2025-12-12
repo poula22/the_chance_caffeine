@@ -10,6 +10,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,15 +24,16 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -71,6 +74,7 @@ import com.thechance.caffeine.presentation.theme.Background
 import com.thechance.caffeine.presentation.theme.CaffeineTheme
 import com.thechance.caffeine.presentation.theme.TextColorLight
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 
 @Composable
@@ -121,6 +125,7 @@ fun CoffeeDetailsScreen(
     val updatedOnNavigate by rememberUpdatedState(onNavigate)
 
     val density = LocalDensity.current
+    val transaction = updateTransition(isLoading)
 
     LaunchedEffect(key1 = isLoading) {
         if (isLoading) {
@@ -164,19 +169,31 @@ fun CoffeeDetailsScreen(
             )
         }
 
-        job1.join()
-        job2.join()
-        job3.join()
-        job4.join()
-        job5.join()
-        beanImageAlpha.snapTo(targetValue = 0f)
+        launch {
+            beanImageAlpha.animateTo(
+                targetValue = 0f,
+                animationSpec = tween(durationMillis = 900, delayMillis = 300, EaseOut)
+            )
+        }
+        joinAll(job1, job2, job3, job4, job5)
     }
 
-    Scaffold(
-        modifier = modifier,
-        topBar = {
-            AnimatedVisibility(
-                visible = !isLoading
+    Column(
+        modifier = modifier
+            .statusBarsPadding()
+            .navigationBarsPadding()
+            .background(Color.White)
+    ) {
+        Box(
+            Modifier
+                .fillMaxSize()
+                .zIndex(2f)
+        ) {
+            transaction.AnimatedVisibility(
+                modifier = Modifier.statusBarsPadding(),
+                visible = { !it },
+                enter = fadeIn() + slideInVertically { -it },
+                exit = fadeOut() + slideOutVertically { -it }
             ) {
                 CaffeineTopBar(
                     leadingIcon = {
@@ -191,14 +208,6 @@ fun CoffeeDetailsScreen(
                 )
             }
 
-        }
-    ) {
-        Box(
-            Modifier
-                .padding(it)
-                .fillMaxSize()
-                .zIndex(2f)
-        ) {
             Image(
                 painter = painterResource(R.drawable.im_coffe_beans),
                 contentDescription = "beans",
@@ -262,9 +271,9 @@ fun CoffeeDetailsScreen(
                         }
                     }
 
-                    AnimatedVisibility(
+                    transaction.AnimatedVisibility(
                         modifier = Modifier.fillMaxWidth(),
-                        visible = !isLoading
+                        visible = { !it },
                     ) {
                         Column {
                             SizeSection(
@@ -288,9 +297,9 @@ fun CoffeeDetailsScreen(
 
                 Spacer(Modifier.weight(1f))
 
-                AnimatedContent(
+                transaction.AnimatedContent(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
-                    targetState = isLoading
+                    contentAlignment = Alignment.BottomCenter
                 ) { isLoadingState ->
 
                     if (isLoadingState) {

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,12 +20,12 @@ fun CaffeineButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    iconPainter: Painter? = null,
+    iconPainter: Painter,
 ) {
-    ElevatedButton(
+    Button(
         modifier = modifier,
         onClick = onClick,
-        elevation = ButtonDefaults.elevatedButtonElevation(
+        elevation = ButtonDefaults.buttonElevation(
             defaultElevation = 6.dp
         ),
         colors = ButtonDefaults.elevatedButtonColors(
@@ -43,15 +42,14 @@ fun CaffeineButton(
             style = MaterialTheme.typography.bodyMedium,
             color = Color.White.copy(0.87f)
         )
-        iconPainter?.let {
-            Icon(
-                modifier = Modifier
-                    .padding(start = 8.dp)
-                    .size(24.dp),
-                painter = iconPainter,
-                contentDescription = "icon",
-                tint = Color.Unspecified
-            )
-        }
+
+        Icon(
+            modifier = Modifier
+                .padding(start = 8.dp)
+                .size(24.dp),
+            painter = iconPainter,
+            contentDescription = "icon",
+            tint = Color.Unspecified
+        )
     }
 }
